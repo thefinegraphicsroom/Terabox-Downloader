@@ -31,8 +31,7 @@ Follow these steps to set up the bot:
 
 1. **Clone the repository**:  
    ```bash  
-   git clone https://github.com/your-username/terabox-bot.git  
-   cd terabox-bot  
+   https://github.com/HmmSmokieOfficial/Terabox-Downloader.git)
 2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
@@ -77,9 +76,9 @@ Follow these steps to set up the bot:
       Open a pull request.
    
 ## 📧 Support
-      For support or inquiries, contact the Bot Owner https://t.me/hmm_Smokie.
-      Happy botting! 🚀
-      Let me know if you’d like to customize this further!
+   For support or inquiries, contact the Bot Owner [ HMM٭SMOKIE](https://t.me/hmm_Smokie).
+   Happy botting! 🚀
+   Let me know if you’d like to customize this further!
 
       
 
