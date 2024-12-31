@@ -4,3 +4,4 @@ motor
 pytz
 pyrofork
 telebot
+tgcrypto
