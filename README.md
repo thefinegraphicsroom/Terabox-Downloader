@@ -76,9 +76,10 @@ Follow these steps to set up the bot:
       Open a pull request.
    
 ## 📧 Support
-    For support or inquiries, contact the Bot Owner [ HMM٭SMOKIE](https://t.me/hmm_Smokie).
-    Happy botting! 🚀
-    Let me know if you’d like to customize this further!
+
+-  For support or inquiries, contact the Bot Owner [HMM٭SMOKIE](https://t.me/hmm_Smokie).
+-  Happy botting! 🚀
+-  Let me know if you’d like to customize this further!
 
       
 
