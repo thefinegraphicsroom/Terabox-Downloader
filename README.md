@@ -51,10 +51,10 @@ Follow these steps to set up the bot:
    python Terabox.py
 
 ## 🤖 Commands
-      Command	Description	Who Can Use
-      /start	Start the bot and receive a welcome message.	All Users
-      /stats	View user activity statistics.	Admins Only
-      /broadcast	Send a broadcast message to all bot users.	Admins Only
+      Command	Description	                                     Who Can Use
+      /start	Start the bot and receive a welcome message.	    All Users
+      /stats	View user activity statistics.	                Admins Only
+      /broadcast	Send a broadcast message to all bot users.	 Admins Only
 
 ## 💡 How It Works
      Users send a Terabox link to the bot.
