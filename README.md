@@ -56,16 +56,17 @@ Follow these steps to set up the bot:
       /stats	View user activity statistics.	Admins Only
       /broadcast	Send a broadcast message to all bot users.	Admins Only
 
-##💡 How It Works
-      Users send a Terabox link to the bot.
-      The bot processes the link using the Terabox API and responds with download links or file details.
-      Admins can use additional commands for managing the bot and broadcasting messages.
-
-##📦 Key Technologies
+## 💡 How It Works
+     Users send a Terabox link to the bot.
+     The bot processes the link using the Terabox API and responds with download links or file details.
+     Admins can use additional commands for managing the bot and broadcasting messages.
+      
+## 📦 Key Technologies
       Pyrogram: Telegram Bot API library.
       Motor: Asynchronous MongoDB driver.
       Aiohttp: For handling API requests.
       Docker: Containerized deployment.
+
 
 ## 🤝 Contributing
       Contributions are welcome! Please follow these steps:
@@ -75,11 +76,12 @@ Follow these steps to set up the bot:
       Push to the branch (git push origin feature-name).
       Open a pull request.
    
-
-##📧 Support
-      For support or inquiries, contact the HMM٭SMOKIE[https://t.me/hmm_Smokie]!.
+## 📧 Support
+      For support or inquiries, contact the Bot Owner https://t.me/hmm_Smokie.
       Happy botting! 🚀
       Let me know if you’d like to customize this further!
+
+      
 
 
 
