@@ -77,11 +77,8 @@ Command	Description	Who Can Use
    Open a pull request.
 
 ##📧 Support
-   For support or inquiries, contact the HMM٭SMOKIE(https://t.me/hmm_Smokie)!.
-   
+   For support or inquiries, contact the HMM٭SMOKIE[https://t.me/hmm_Smokie]!.
    Happy botting! 🚀
-   
-   vbnet
    Let me know if you’d like to customize this further!
 
 
