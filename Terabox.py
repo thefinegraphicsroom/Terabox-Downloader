@@ -16,22 +16,22 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Bot Configuration
-API_ID = "26490815"
-API_HASH = "b99d8504b8812f9ec395ec61c010ac32"
-BOT_TOKEN = "8156780217:AAEg_Tt1fYQF9SQlLHE5annBrvAhBlNTb6I"
-CHANNEL_USERNAME = "@BotCodeVerse"
+API_ID = ""
+API_HASH = ""
+BOT_TOKEN = ""
+CHANNEL_USERNAME = ""
 ADMIN_IDS = [1949883614]
-MONGO_URL = "mongodb+srv://Terabox:SmokieOfficial@cluster0.qmr4z.mongodb.net/Terabox?retryWrites=true&w=majority&appName=Cluster0"
-LOG_CHANNEL = -1001806351030  # Replace with your private channel ID
+MONGO_URL = ""
+LOG_CHANNEL =   # Replace with your private channel ID
 
 # URLs and API Configuration
-WEBAPP_URL = "https://teraboxdownloader.top/video.php"
+WEBAPP_URL = ""
 TERABOX_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-20_23-41-03.jpg?v=1734718281072"
 NONVEG_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-21_00-00-51.jpg?v=1734719485408"
 WELCOME_VIDEO = "https://cdn.glitch.global/7ffde04b-77d1-43ae-8db2-f9a91b2ea4f9/large-thumbnail20240702-2246550-6ja0zn.mp4?v=1735648982644"
-TERABOX_API_URL = "https://terabox-online-player-and-downloader-api.p.rapidapi.com/"
-RAPIDAPI_KEY = "41f61728e4msh7146a573b7a39fcp1baa1fjsn77a7b0f73bc8"
-RAPIDAPI_HOST = "terabox-online-player-and-downloader-api.p.rapidapi.com"
+TERABOX_API_URL = ""
+RAPIDAPI_KEY = ""
+RAPIDAPI_HOST = ""
 
 # Configure worker pools
 MAX_WORKERS = 1000
