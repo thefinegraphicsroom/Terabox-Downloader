@@ -454,6 +454,10 @@ async def main():
         async def start_command(client, message):
             await bot.handle_start_command(client, message)
 
+        @bot.app.on_callback_query()
+        async def handle_callback(client, callback_query):
+            await bot.handle_callback_query(client, callback_query)
+
         @bot.app.on_message(filters.command("stats") & filters.user(ADMIN_IDS))
         async def stats_command(client, message):
             try:
