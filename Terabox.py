@@ -415,35 +415,42 @@ class CombinedBot:
                     disable_notification=True
                 )
             return True, ""
+        except errors.UserIsBlocked:
+            # Silently handle blocked users
+            return False, "user_blocked"
         except Exception as e:
+            logger.debug(f"Broadcast failed for user {user_id}: {str(e)}")
             return False, str(e)
 
     async def broadcast_to_users(self, message: Message, admin_msg: Message = None):
-        """Broadcast a message to all users in the database"""
         all_users = await self.db.users.find().to_list(length=None)
         success_count = 0
         failed_count = 0
+        blocked_count = 0
         
         for user in all_users:
             success, error = await self.broadcast_message(message, user["user_id"])
             if success:
                 success_count += 1
             else:
-                failed_count += 1
-                logger.error(f"Broadcast failed for user {user['user_id']}: {error}")
+                if error == "user_blocked":
+                    blocked_count += 1
+                else:
+                    failed_count += 1
             
-            if admin_msg and (success_count + failed_count) % 5 == 0:
+            if admin_msg and (success_count + failed_count + blocked_count) % 5 == 0:
                 await admin_msg.edit_text(
                     f"Broadcast Status:\n"
                     f"Total Users: {len(all_users)}\n"
-                    f"Completed: {success_count + failed_count}\n"
+                    f"Completed: {success_count + failed_count + blocked_count}\n"
                     f"Success: {success_count}\n"
+                    f"Blocked: {blocked_count}\n"
                     f"Failed: {failed_count}"
                 )
             
-            await asyncio.sleep(0.05)  # Rate limiting
+            await asyncio.sleep(0.05)
         
-        return success_count, failed_count
+        return success_count, failed_count + blocked_count
 
 async def main():
     """Main entry point"""
