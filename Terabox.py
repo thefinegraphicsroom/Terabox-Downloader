@@ -21,7 +21,7 @@ API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHANNEL_USERNAME = os.environ.get("CHANNEL_USERNAME")
-ADMIN_IDS = [int(id) for id in os.environ.get("ADMIN_IDS", "").split(",") if id]
+ADMIN_IDS = [1949883614]  # Directly define the list of admin IDs
 LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
 
 # MongoDB Configuration
