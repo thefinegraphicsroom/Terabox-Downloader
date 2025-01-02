@@ -16,10 +16,10 @@ from datetime import UTC, datetime, timedelta
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Telegram Bot Configuration
-TELEGRAM_API_ID = os.environ.get("TELEGRAM_API_ID")
-TELEGRAM_API_HASH = os.environ.get("TELEGRAM_API_HASH")
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+# Bot Configuration
+API_ID = os.environ.get("API_ID")
+API_HASH = os.environ.get("API_HASH")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 CHANNEL_USERNAME = os.environ.get("CHANNEL_USERNAME")
 ADMIN_IDS = [int(id) for id in os.environ.get("ADMIN_IDS", "").split(",") if id]
 LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
@@ -27,7 +27,7 @@ LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
 # MongoDB Configuration
 MONGO_URL = os.environ.get("MONGO_URL")
 
-# API Configuration
+# URLs and API Configuration
 WEBAPP_URL = os.environ.get("WEBAPP_URL")
 TERABOX_API_URL = os.environ.get("TERABOX_API_URL")
 RAPIDAPI_KEY = os.environ.get("RAPIDAPI_KEY")
