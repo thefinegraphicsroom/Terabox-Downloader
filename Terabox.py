@@ -34,9 +34,9 @@ RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST")
 
 # Media URLs
-TERABOX_IMAGE = os.getenv("TERABOX_IMAGE")
-NONVEG_IMAGE = os.getenv("NONVEG_IMAGE")
-WELCOME_VIDEO = os.getenv("WELCOME_VIDEO")
+TERABOX_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-20_23-41-03.jpg?v=1734718281072"
+NONVEG_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-21_00-00-51.jpg?v=1734719485408"
+WELCOME_VIDEO = "https://cdn.glitch.global/7ffde04b-77d1-43ae-8db2-f9a91b2ea4f9/large-thumbnail20240702-2246550-6ja0zn.mp4?v=1735648982644"
 
 # Configure worker pools
 MAX_WORKERS = 1000
