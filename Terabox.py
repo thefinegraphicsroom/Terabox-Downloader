@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # Bot Configuration
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = "7964395750:AAHtEjjIL-7i-iX7rTmj2lR_AVmL46J8L7s"
 CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
 ADMIN_IDS = [1949883614]  # Directly define the list of admin IDs
 LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
