@@ -11,6 +11,9 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Tuple
 from pyrogram.types import Message
 from datetime import UTC, datetime, timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
