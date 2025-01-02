@@ -1,3 +1,4 @@
+import os
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from pyrogram import Client, filters
@@ -15,23 +16,27 @@ from datetime import UTC, datetime, timedelta
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Bot Configuration
-API_ID = ""
-API_HASH = ""
-BOT_TOKEN = ""
-CHANNEL_USERNAME = ""
-ADMIN_IDS = [1949883614]
-MONGO_URL = ""
-LOG_CHANNEL =   # Replace with your private channel ID
+# Telegram Bot Configuration
+TELEGRAM_API_ID = os.environ.get("TELEGRAM_API_ID")
+TELEGRAM_API_HASH = os.environ.get("TELEGRAM_API_HASH")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+CHANNEL_USERNAME = os.environ.get("CHANNEL_USERNAME")
+ADMIN_IDS = [int(id) for id in os.environ.get("ADMIN_IDS", "").split(",") if id]
+LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
 
-# URLs and API Configuration
-WEBAPP_URL = ""
-TERABOX_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-20_23-41-03.jpg?v=1734718281072"
-NONVEG_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-21_00-00-51.jpg?v=1734719485408"
-WELCOME_VIDEO = "https://cdn.glitch.global/7ffde04b-77d1-43ae-8db2-f9a91b2ea4f9/large-thumbnail20240702-2246550-6ja0zn.mp4?v=1735648982644"
-TERABOX_API_URL = ""
-RAPIDAPI_KEY = ""
-RAPIDAPI_HOST = ""
+# MongoDB Configuration
+MONGO_URL = os.environ.get("MONGO_URL")
+
+# API Configuration
+WEBAPP_URL = os.environ.get("WEBAPP_URL")
+TERABOX_API_URL = os.environ.get("TERABOX_API_URL")
+RAPIDAPI_KEY = os.environ.get("RAPIDAPI_KEY")
+RAPIDAPI_HOST = os.environ.get("RAPIDAPI_HOST")
+
+# Media URLs
+TERABOX_IMAGE = os.environ.get("TERABOX_IMAGE")
+NONVEG_IMAGE = os.environ.get("NONVEG_IMAGE")
+WELCOME_VIDEO = os.environ.get("WELCOME_VIDEO")
 
 # Configure worker pools
 MAX_WORKERS = 1000
