@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 # Bot Configuration
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
-BOT_TOKEN = "7964395750:AAHtEjjIL-7i-iX7rTmj2lR_AVmL46J8L7s"
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
 ADMIN_IDS = [1949883614]  # Directly define the list of admin IDs
 LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
@@ -34,9 +34,9 @@ RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST")
 
 # Media URLs
-TERABOX_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-20_23-41-03.jpg?v=1734718281072"
-NONVEG_IMAGE = "https://cdn.glitch.global/37127bbb-2499-443c-9bec-47899afdad04/photo_2024-12-21_00-00-51.jpg?v=1734719485408"
-WELCOME_VIDEO = "https://cdn.glitch.global/7ffde04b-77d1-43ae-8db2-f9a91b2ea4f9/large-thumbnail20240702-2246550-6ja0zn.mp4?v=1735648982644"
+TERABOX_IMAGE = os.getenv("TERABOX_IMAGE")
+NONVEG_IMAGE = os.getenv("NONVEG_IMAGE")
+WELCOME_VIDEO = os.getenv("WELCOME_VIDEO")
 
 # Configure worker pools
 MAX_WORKERS = 1000
