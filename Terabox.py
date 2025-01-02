@@ -21,7 +21,7 @@ API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
-ADMIN_IDS = [1949883614]  # Directly define the list of admin IDs
+ADMIN_IDS = [1949883614]  
 LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
 
 # MongoDB Configuration
