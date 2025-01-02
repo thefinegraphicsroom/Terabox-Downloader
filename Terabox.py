@@ -17,26 +17,26 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Bot Configuration
-API_ID = os.environ.get("API_ID")
-API_HASH = os.environ.get("API_HASH")
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-CHANNEL_USERNAME = os.environ.get("CHANNEL_USERNAME")
+API_ID = os.getenv("API_ID")
+API_HASH = os.getenv("API_HASH")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHANNEL_USERNAME = os.getenv("CHANNEL_USERNAME")
 ADMIN_IDS = [1949883614]  # Directly define the list of admin IDs
-LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
+LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
 
 # MongoDB Configuration
-MONGO_URL = os.environ.get("MONGO_URL")
+MONGO_URL = os.getenv("MONGO_URL")
 
 # URLs and API Configuration
-WEBAPP_URL = os.environ.get("WEBAPP_URL")
-TERABOX_API_URL = os.environ.get("TERABOX_API_URL")
-RAPIDAPI_KEY = os.environ.get("RAPIDAPI_KEY")
-RAPIDAPI_HOST = os.environ.get("RAPIDAPI_HOST")
+WEBAPP_URL = os.getenv("WEBAPP_URL")
+TERABOX_API_URL = os.getenv("TERABOX_API_URL")
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST")
 
 # Media URLs
-TERABOX_IMAGE = os.environ.get("TERABOX_IMAGE")
-NONVEG_IMAGE = os.environ.get("NONVEG_IMAGE")
-WELCOME_VIDEO = os.environ.get("WELCOME_VIDEO")
+TERABOX_IMAGE = os.getenv("TERABOX_IMAGE")
+NONVEG_IMAGE = os.getenv("NONVEG_IMAGE")
+WELCOME_VIDEO = os.getenv("WELCOME_VIDEO")
 
 # Configure worker pools
 MAX_WORKERS = 1000
