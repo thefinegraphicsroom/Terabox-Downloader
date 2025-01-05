@@ -261,6 +261,12 @@ class CombinedBot:
             f"User: {message.from_user.mention} [`{message.from_user.id}`]"
         )
         await self.send_log(log_text)
+        
+        # Check membership before proceeding
+        if not await self.check_member(message.from_user.id):
+            await self.send_force_sub_message(message.chat.id)
+            return
+            
         keyboard = InlineKeyboardMarkup([
             [
                 InlineKeyboardButton(
