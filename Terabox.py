@@ -1,22 +1,19 @@
-import os
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from pyrogram import Client, filters
+from tkinter import Message
+from pyrogram import Client, filters, errors
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from pyrogram.enums import ChatMemberStatus
-from typing import Dict, Any
-import aiohttp
+from typing import Dict, Any, Tuple
 import logging
 from motor.motor_asyncio import AsyncIOMotorClient
-from typing import Tuple
-from pyrogram.types import Message
 from datetime import UTC, datetime, timedelta
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Bot Configuration
 API_ID = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -29,10 +26,6 @@ MONGO_URL = os.getenv("MONGO_URL")
 
 # URLs and API Configuration
 WEBAPP_URL = os.getenv("WEBAPP_URL")
-TERABOX_API_URL = os.getenv("TERABOX_API_URL")
-RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST")
-
 # Media URLs
 TERABOX_IMAGE = os.getenv("TERABOX_IMAGE")
 NONVEG_IMAGE = os.getenv("NONVEG_IMAGE")
@@ -40,7 +33,6 @@ WELCOME_VIDEO = os.getenv("WELCOME_VIDEO")
 
 # Configure worker pools
 MAX_WORKERS = 1000
-DOWNLOAD_SEMAPHORE = asyncio.Semaphore(500)
 
 class CombinedBot:
     def __init__(self):
@@ -51,7 +43,6 @@ class CombinedBot:
             bot_token=BOT_TOKEN,
             workers=1000
         )
-        self.session = None
         self.executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
 
     async def get_user_stats(self):
@@ -86,9 +77,8 @@ class CombinedBot:
             logger.error(f"Failed to send log: {e}")
         
     async def start(self):
-        """Initialize the bot, aiohttp session, and MongoDB connection"""
+        """Initialize the bot and MongoDB connection"""
         await self.app.start()
-        self.session = aiohttp.ClientSession()
         self.mongo_client = AsyncIOMotorClient(MONGO_URL)
         self.db = self.mongo_client.Terabox
         logger.info("Bot started successfully")
@@ -96,7 +86,6 @@ class CombinedBot:
     async def stop(self):
         """Cleanup resources"""
         await self.app.stop()
-        await self.session.close()
         self.executor.shutdown()
         self.mongo_client.close()
         logger.info("Bot stopped successfully")
@@ -119,29 +108,15 @@ class CombinedBot:
             logger.error(f"Error storing user data: {e}")
 
     async def check_member(self, user_id: int) -> bool:
-        """Check if user is a member of the required channel with silent error handling"""
+        """Check if user is a member of the required channel"""
         try:
             member = await self.app.get_chat_member(CHANNEL_USERNAME, user_id)
             return member.status in [ChatMemberStatus.MEMBER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]
-        except Exception:
-            # Silently handle the error and return False
+        except errors.UserNotParticipant:
             return False
-
-    async def fetch_terabox_api(self, link: str) -> Dict[str, Any]:
-        """Async function to fetch data from Terabox API"""
-        headers = {
-            "x-rapidapi-key": RAPIDAPI_KEY,
-            "x-rapidapi-host": RAPIDAPI_HOST,
-        }
-        params = {"link": link}
-        
-        async with DOWNLOAD_SEMAPHORE:
-            try:
-                async with self.session.get(TERABOX_API_URL, headers=headers, params=params) as response:
-                    return await response.json()
-            except Exception as e:
-                logger.error(f"API request failed: {e}")
-                raise
+        except Exception as e:
+            logger.debug(f"Unexpected error in check_member: {str(e)}")
+            return False
 
     def get_force_sub_buttons(self) -> InlineKeyboardMarkup:
         """Generate force subscribe buttons"""
@@ -169,8 +144,7 @@ class CombinedBot:
         )
 
     async def handle_start_command(self, client, message):
-        """Handle the /start command with modified welcome message and buttons"""
-        
+        """Handle the /start command"""
         log_text = (
             "🤖 Bot Start\n"
             f"User: {message.from_user.mention} [`{message.from_user.id}`]\n"
@@ -178,15 +152,14 @@ class CombinedBot:
         )
         await self.send_log(log_text)
 
-        # Store user data in MongoDB
         await self.store_user(message.from_user)
         
         user_mention = message.from_user.mention
         welcome_text = (
             f"**👋 Welcome {user_mention}!**\n\n"
-            "**🌟 I'm your Terabox Download Assistant! Here's what I can do:**\n\n"
+            "**🌟 I'm your Terabox Download and Non-Veg Assistant! Here's what I can do:**\n\n"
             "**📥 Send me any Terabox link to:**\n"
-            "**• Get direct download links**\n"
+            "**📥 Send me /nonveg command and see magic:**\n"
             "**• Watch files online**\n"
             "**• Access file details**\n\n"
             "**💫 Just send me a link to get started!**"
@@ -213,21 +186,20 @@ class CombinedBot:
                 reply_markup=keyboard
             )
 
-    def create_reply_markup(self, video_id: str, download_link: str) -> InlineKeyboardMarkup:
-        """Create inline keyboard markup for Terabox links"""
+    def create_reply_markup(self, terabox_link: str) -> InlineKeyboardMarkup:
+        """Create inline keyboard markup with WebApp button"""
+        watch_url = f"{WEBAPP_URL}{terabox_link}"
         return InlineKeyboardMarkup([
             [
                 InlineKeyboardButton(
-                    "▶️ Watch Online", 
-                    web_app=WebAppInfo(url=f"{WEBAPP_URL}?id={video_id}")
-                ),
-                InlineKeyboardButton("📥 Download", url=download_link)
+                    "🎬 Watch in Mini App",
+                    web_app=WebAppInfo(url=watch_url)
+                )
             ]
         ])
 
     async def handle_terabox_link(self, client, message):
-        """Handle incoming Terabox links with membership check"""
-
+        """Handle incoming Terabox links"""
         log_text = (
             "📥 New Link Received\n"
             f"User: {message.from_user.mention} [`{message.from_user.id}`]\n"
@@ -235,61 +207,18 @@ class CombinedBot:
         )
         await self.send_log(log_text)
 
-        # First check if user is a member of the channel
         if not await self.check_member(message.from_user.id):
             await self.send_force_sub_message(message.chat.id)
             return
 
         terabox_link = message.text.strip()
-
         try:
-            status_message = await message.reply_text("Processing your request...")
-            data = await self.fetch_terabox_api(terabox_link)
-
-            if "url" in data:
-                download_link = data["url"].replace("\\/", "/")
-                video_id = download_link.split("id=")[-1]
-                reply_markup = self.create_reply_markup(video_id, download_link)
-
-                await status_message.delete()
-                await message.reply_photo(
-                    photo=TERABOX_IMAGE,
-                    caption="Boom! Your File Link is Good to Go!\n\nＰＯＷＥＲＥＤ ＢＹ ＰＯＲＮＨＵＢ Ｘ ＴＥＲＡＢＯＸ",
-                    reply_markup=reply_markup
-                )
-
-            elif "data" in data:
-                details = data.get("data", {})
-                file_name = details.get("file_name", "Unknown")
-                file_size = details.get("file_size", "Unknown")
-                download_link = details.get("download_link", "Unavailable")
-
-                reply_markup = InlineKeyboardMarkup([
-                    [
-                        InlineKeyboardButton(
-                            "📱 View in Mini App",
-                            web_app=WebAppInfo(url=f"{WEBAPP_URL}?filename={file_name}")
-                        ),
-                        InlineKeyboardButton("📥 Direct Download", url=download_link)
-                    ]
-                ])
-
-                reply_text = (
-                    f"**Terabox File Details:**\n"
-                    f"**Name:** {file_name}\n"
-                    f"**Size:** {file_size}"
-                )
-
-                await status_message.delete()
-                await message.reply_photo(
-                    photo=TERABOX_IMAGE,
-                    caption=reply_text,
-                    reply_markup=reply_markup
-                )
-
-            else:
-                await status_message.edit_text("Unexpected response format. Please check the link.")
-
+            reply_markup = self.create_reply_markup(terabox_link)
+            await message.reply_photo(
+                photo=TERABOX_IMAGE,
+                caption="Boom! Your File Link is Good to Go!\n\nＰＯＷＥＲＥＤ ＢＹ ＰＯＲＮＨＵＢ Ｘ ＴＥＲＡＢＯＸ",
+                reply_markup=reply_markup
+            )
         except Exception as e:
             logger.error(f"Error processing link: {str(e)}", exc_info=True)
             await message.reply_text(
@@ -298,14 +227,16 @@ class CombinedBot:
 
     async def handle_callback_query(self, client, callback_query):
         """Handle callback queries for membership check"""
-        log_text = (
-            "🔄 Membership Check\n"
-            f"User: {callback_query.from_user.mention} [`{callback_query.from_user.id}`]\n"
-            f"Status: {'✅ Joined' if await self.check_member(callback_query.from_user.id) else '❌ Not Joined'}"
-        )
-        await self.send_log(log_text)
-        if callback_query.data == "check_membership":
-            if await self.check_member(callback_query.from_user.id):
+        try:
+            is_member = await self.check_member(callback_query.from_user.id)
+            
+            if is_member:
+                log_text = (
+                    "✅ Successful Membership Check\n"
+                    f"User: {callback_query.from_user.mention} [`{callback_query.from_user.id}`]"
+                )
+                await self.send_log(log_text)
+                
                 await callback_query.message.edit_text(
                     "✅ Now You Can Send Me Terabox Links.",
                 )
@@ -314,6 +245,12 @@ class CombinedBot:
                     "❌ You haven't joined the channel yet. Please join first!",
                     show_alert=True
                 )
+        except Exception as e:
+            logger.debug(f"Error in callback query: {e}")
+            await callback_query.answer(
+                "Please try again.",
+                show_alert=True
+            )
 
     async def handle_nonveg_reel(self, client, message):
         """Handle the nonveg_reel command"""
@@ -466,10 +403,6 @@ async def main():
         async def start_command(client, message):
             await bot.handle_start_command(client, message)
 
-        @bot.app.on_callback_query()
-        async def handle_callback(client, callback_query):
-            await bot.handle_callback_query(client, callback_query)
-
         @bot.app.on_message(filters.command("stats") & filters.user(ADMIN_IDS))
         async def stats_command(client, message):
             try:
@@ -489,9 +422,17 @@ async def main():
                 logger.error(f"Error getting stats: {e}")
                 await message.reply_text("Error retrieving statistics.")
             
-        @bot.app.on_message(filters.regex(r"terasharelink\.com|1024terabox\.com|teraboxlink\.com|terafileshare\.com|teraboxapp\.com|teraboxshare\.com"))
+        @bot.app.on_message(filters.regex(r"^(?:http|https)://"))
         async def handle_message(client, message):
             await bot.handle_terabox_link(client, message)
+
+        @bot.app.on_message(filters.command("nonveg"))
+        async def nonveg_command(client, message):
+            await bot.handle_nonveg_reel(client, message)
+
+        @bot.app.on_callback_query()
+        async def handle_callback(client, callback_query):
+            await bot.handle_callback_query(client, callback_query)
 
         @bot.app.on_message(filters.command("broadcast") & filters.user(ADMIN_IDS))
         async def broadcast_handler(client, message):
